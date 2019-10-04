@@ -1,0 +1,5 @@
+> table(lda.class, y)
+         y
+lda.class   0   1
+        0 500 250
+        1 285 966

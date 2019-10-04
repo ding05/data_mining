@@ -1,0 +1,5 @@
+> table(qda.class, bank_test$y)
+         
+qda.class   0   1
+        0 219  28
+        1  17 148

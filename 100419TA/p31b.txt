@@ -1,0 +1,5 @@
+> table(qda.class, y)
+         y
+qda.class    0    1
+        0  660   60
+        1  125 1156

@@ -1,0 +1,10 @@
+> table(y_pred, y)
+      y
+y_pred   0   1
+     0 207  21
+     1  29 155
+> table(y_pred, y)
+      y
+y_pred   0   1
+     0 220  35
+     1  16 141

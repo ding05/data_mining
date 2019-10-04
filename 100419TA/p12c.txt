@@ -1,0 +1,5 @@
+table(y_pred, y)
+      y
+y_pred   0   1
+     0 216  27
+     1  20 149
