@@ -1,0 +1,19 @@
+> summary(tune.out)
+
+Parameter tuning of 'svm':
+
+- sampling method: 10-fold cross validation 
+
+- best parameters:
+ cost
+   10
+
+- best performance: 0.09721254 
+
+- Detailed performance results:
+   cost      error dispersion
+1 1e-01 0.10696864 0.05313495
+2 1e+00 0.10214866 0.06083284
+3 1e+01 0.09721254 0.05649902
+4 1e+02 0.11167247 0.05296278
+5 1e+03 0.10911731 0.05140636

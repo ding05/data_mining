@@ -1,0 +1,6 @@
+> table(true = dat[, 'y'],
++       pred = predict(tune.out$best.mode, newdata = dat))
+    pred
+true   0   1
+   0 207  29
+   1  11 165

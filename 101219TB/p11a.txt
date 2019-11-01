@@ -1,0 +1,10 @@
+Regression tree:
+tree(formula = carseats_train)
+Variables actually used in tree construction:
+[1] "Price"       "Age"         "CompPrice"   "Education"   "Advertising"
+[6] "Income"     
+Number of terminal nodes:  23 
+Residual mean deviance:  3.296 = 913 / 277 
+Distribution of residuals:
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ -4.994  -1.178   0.037   0.000   1.390   4.627

@@ -1,0 +1,16 @@
+> summary(boost.carseats, main = 'Influence of the variables
++         in the car seat data (incomplete display)')
+                    var    rel.inf
+Price             Price 37.2157540
+CompPrice     CompPrice 18.3317863
+Age                 Age 15.8381640
+Advertising Advertising 11.1466047
+Income           Income  9.1107826
+Population   Population  4.9509896
+Education     Education  2.5820841
+US                   US  0.4677127
+Urban             Urban  0.3561220
+> mean((yhat.boost_train - carseats_train.test) ^2)
+[1] 2.927084
+> mean((yhat.boost_test - carseats_train.test) ^2)
+[1] 3.963599

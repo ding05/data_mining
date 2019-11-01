@@ -1,0 +1,4 @@
+> mean((yhat.bag_train - carseats_train.test) ^2)
+[1] 0.8515121
+> mean((yhat.bag_train - carseats_train.test) ^2)
+[1] 4.442605

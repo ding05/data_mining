@@ -1,0 +1,15 @@
+> mean((yhat.rf_train - carseats_train.test) ^2)
+[1] 0.894485
+> mean((yhat.rf_train - carseats_train.test) ^2)
+[1] 4.34613
+> importance(rf.carseats)
+               %IncMSE IncNodePurity
+CompPrice   31.0284280     412.38969
+Income       3.1384141     205.52532
+Advertising 23.5915781     311.81831
+Population  -2.1916248     175.88406
+Price       53.8894375     771.40372
+Age         10.8109932     302.85663
+Education    2.9038217     118.02371
+Urban        0.1951184      20.12136
+US           1.7918573      18.88653

@@ -1,0 +1,4 @@
+> mean((yhat_train - carseats_train$Sales)^2)
+[1] 3.043394
+> mean((yhat_test - carseats_test$Sales)^2)
+[1] 6.03393

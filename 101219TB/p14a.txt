@@ -1,0 +1,15 @@
+> summary(boost.carseats)
+                    var    rel.inf
+Price             Price 34.8702817
+CompPrice     CompPrice 21.5411832
+Age                 Age 14.5814972
+Advertising Advertising 13.4741289
+Population   Population  5.8969708
+Income           Income  5.8162706
+Education     Education  3.4157824
+US                   US  0.2071120
+Urban             Urban  0.1967732
+> mean((yhat.boost_train - carseats_train.test) ^2)
+[1] 2.771923
+> mean((yhat.boost_test - carseats_train.test) ^2)
+[1] 3.679939
