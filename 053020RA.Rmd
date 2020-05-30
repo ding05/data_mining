@@ -1,0 +1,243 @@
+---
+title: "Assignment Two"
+author: "D"
+date: "5/15/2020"
+output: html_document
+---
+
+Problem 1
+
+Part a
+
+```{r, warning = FALSE, message = FALSE}
+load("Residen.RData")
+set.seed(0525)
+```
+
+Comment
+
+Literally set.seed(0525) is equivalent to set.seed(525).
+
+---
+
+Part b
+
+```{r, warning = FALSE, message = FALSE}
+row.number = sample(1 : nrow(Residen), 0.8 * nrow(Residen))
+train = Residen[row.number, ]
+test = Residen[-row.number, ]
+```
+
+Comment
+
+We randomly select 80% of data for training and 20% for testing.
+
+---
+
+Part c
+
+```{r, warning = FALSE, message = FALSE}
+maxmod = lm(log(V104) ~ . - V105, data = train)
+pred1 = predict(maxmod, newdata = test)
+rmse = sqrt(sum((exp(pred1) - test$V104) ^ 2) / length(test$V104))
+```
+
+```{r}
+rmse
+```
+
+Comment
+
+Fit a multiple linear regression model with all the other variables besides V105.
+
+Input the test data.
+
+We get the required test RMSE, 1009.30.
+
+---
+
+Part d
+
+```{r, warning = FALSE, message = FALSE}
+library(MASS)
+minmod = lm(log(V104) ~ 1, data = train)
+stepwisemod = stepAIC(minmod, direction = "both", scope = list(upper = maxmod, lower = minmod), trace = 0)
+pred2 = predict(stepwisemod, newdata = test)
+rmse = sqrt(sum((exp(pred2) - test$V104) ^ 2) / length(test$V104))
+```
+
+```{r}
+rmse
+```
+
+Comment
+
+We use (forward) stepwise selection, from the null model to the maximal model. Please note that forward stepwise selection and backward stepwise selection are very likely to gerenate different minimal adequate models, i.e. those including different items and with different statistics, due to multicollinearity.
+
+Input the test data.
+
+We get the required test RMSE, 674.58.
+
+---
+
+Part e
+
+```{r, warning = FALSE, message = FALSE}
+library(glmnet)
+library(dplyr)
+library(tidyr)
+x_train = model.matrix(V104 ~. - V105, data = train)[,-1]
+y_train = train %>%
+  select(V104) %>%
+  unlist() %>%
+  as.numeric()
+x_test = model.matrix(V104 ~. - V105, test)[,-1]
+y_test = test %>%
+  select(V104) %>%
+  unlist() %>%
+  as.numeric()
+cv.ridgemod = cv.glmnet(x_train, log(y_train), alpha = 0)
+bestlam = cv.ridgemod$lambda.min
+pred3 = predict(cv.ridgemod, s = bestlam, newx = x_test)
+rmse = sqrt(sum((exp(pred3) - test$V104) ^ 2) / length(test$V104))
+```
+
+```{R}
+rmse
+```
+
+Comment
+
+We create the explantory variable matrix x and the response variable vector y on training and test datasets respectively.
+
+Fit a ridge regression model on the training set with the best lambda selected by cross validation that minimizes the training MSE.
+
+Select the best lambda that minimizes the training MSE.
+
+Input the test data and predict with the best lambda selected.
+
+We get the required test RMSE, 358.96.
+
+---
+
+Part f
+
+```{r, warning = FALSE, message = FALSE}
+x_test = model.matrix(V104 ~. - V105, test)[,-1]
+y_test = test %>%
+  select(V104) %>%
+  unlist() %>%
+  as.numeric()
+cv.lassomod = cv.glmnet(x_train, log(y_train), alpha = 1)
+bestlam = cv.lassomod$lambda.min
+pred4 = predict(cv.lassomod, s = bestlam, newx = x_test)
+rmse = sqrt(sum((exp(pred4) - test$V104) ^ 2) / length(test$V104))
+```
+
+```{R}
+rmse
+```
+
+Comment
+
+Fit a LASSO regression model on the training set with the best lambda selected by cross validation that minimizes the training MSE.
+
+Input the test data and predict with the best lambda selected.
+
+We get the required test RMSE, 642.72.
+
+---
+
+Part g
+
+Comment
+
+1. Evaluate predictive accuracy via test RMSE among the four models.
+
+In terms of the four models we used, the maximal multiple linear regression, the minimal adequate multiple linear regression, the ridge regression and the LASSO regression, the accuracy based on the test RMSEs vary.
+
+In this experiment, we get RMSE(ridge) < RMSE(LASSO) < RMSE(minimal adequate) < RMSE(maximal). Therefore, the model with the highest accuarcy is the ridge regression model; on the contrary, the model with the lowest accuracy is the maximal regression model.
+
+With our best model, the ridge regression, predicting the actual sale price has the standard deviation of the unexplained variance being 358.96. It measures how accurate our prediction is.
+
+In addition, we repeat the same process using different experiements, figuring that the relative order of the accuracies for the minimal adequate, the ridge and the LASSO can change. For example, in another experiment we get RMSE(LASSO) < RMSE(ridge) < RMSE(minimal adequate) < RMSE(maximal).
+
+Yes, there is difference among the test errors resulting from these four approaches.
+
+2. Evaluate predictive accuracy via test MAE among the four models.
+
+```{r, warning = FALSE, message = FALSE}
+mae1 = sum(abs(exp(pred1) - test$V104)) / length(test$V104)
+mae2 = sum(abs(exp(pred2) - test$V104)) / length(test$V104)
+mae3 = sum(abs(exp(pred3) - test$V104)) / length(test$V104)
+mae4 = sum(abs(exp(pred4) - test$V104)) / length(test$V104)
+```
+
+```{r}
+mae1
+mae2
+mae3
+mae4
+```
+
+Comment
+
+Using MAEs to compare the four models, we get MAE(ridge) < MAE(LASSO) < MAE(minimal adequate) < MAE(maximal). Therefore, the best model is the ridge regression model; on the contrary, the poorest model is the maximal regression model.
+
+3. Evaluate predictive accuracy via R^2 among the four models.
+
+```{r, warning = FALSE, message = FALSE}
+rsq1 = 1 - sum((exp(pred1) - test$V104) ^ 2) / sum((test$V104 - mean(test$V104)) ^ 2)
+rsq2 = 1 - sum((exp(pred2) - test$V104) ^ 2) / sum((test$V104 - mean(test$V104)) ^ 2)
+rsq3 = 1 - sum((exp(pred3) - test$V104) ^ 2) / sum((test$V104 - mean(test$V104)) ^ 2)
+rsq4 = 1 - sum((exp(pred4) - test$V104) ^ 2) / sum((test$V104 - mean(test$V104)) ^ 2)
+```
+
+```{r}
+rsq1
+rsq2
+rsq3
+rsq4
+```
+
+Comment
+
+Using R^2s to compare the four models, we get R^2(maximal) < R^2(minimal adequate) < R^2(LASSO) < R^2(ridge). Therefore, the best model is the ridge regression model; on the contrary, the poorest model is the maximal regression model.
+
+4. Evaluate fitness via training RMSE and test RMSE in each model.
+
+```{r, warning = FALSE, message = FALSE}
+pred1_train = predict(maxmod, newdata = train)
+rmse1 = sqrt(sum((exp(pred1_train) - train$V104) ^ 2) / length(train$V104))
+pred2_train = predict(stepwisemod, newdata = train)
+rmse2 = sqrt(sum((exp(pred2_train) - train$V104) ^ 2) / length(train$V104))
+bestlam = cv.ridgemod$lambda.min
+pred3_train = predict(cv.ridgemod, s = bestlam, newx = x_train)
+rmse3 = sqrt(sum((exp(pred3_train) - train$V104) ^ 2) / length(train$V104))
+bestlam = cv.ridgemod$lambda.min
+pred4_train = predict(cv.lassomod, s = bestlam, newx = x_train)
+rmse4 = sqrt(sum((exp(pred4_train) - train$V104) ^ 2) / length(train$V104))
+```
+
+```{R}
+rmse1
+rmse2
+rmse3
+rmse4
+```
+
+Comment
+
+We summarize the following table for RMSEs and fitness.
+
+Model, Training RMSE, Test RMSE, Fitness
+
+Maximal, 517.34, 1009.30, Overfitting
+
+Minimal adequate, 606.92, 674.58, Fine
+
+Ridge, 379.20, 358.96, Fine
+
+LASSO, 526.70, 642.72, Overfitting
+
+In all, among the four models, the ridge regression model produces smiliar good accuracies on the training data and the test data. The ridge regression model gets the lowest RMSE and fine fitness, which should be the best model for this experiment.
