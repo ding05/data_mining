@@ -241,3 +241,6 @@ Ridge, 379.20, 358.96, Fine
 LASSO, 526.70, 642.72, Overfitting
 
 In all, among the four models, the ridge regression model produces smiliar good accuracies on the training data and the test data. The ridge regression model gets the lowest RMSE and fine fitness, which should be the best model for this experiment.
+
+
+# Comment: Why use log transform - need to justify choices (transform not needed in this assignment). Number of non-zero coefficients? Choice of final model was well justified.
