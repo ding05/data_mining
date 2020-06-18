@@ -74,7 +74,7 @@ Given the description of the network, first of all we draw its structure.\\
       \node[mycircle] (c2)at (3,0) {$x_2$};
       \node[mycircle] (c4)at (5,0.75) {$1$};
       \node[mycircle] (c5)at (1.5,3) {$h_1$};;
-      \node[mycircle] (c8)at (5,3.75) {$1$};
+      \node[mycircle] (c8)at (5,3.75) {$1$}; % Comment: There are two biases here, not just one. The following calculations are fine, but we don't really treat bias as a neuron.
       \node[mycircle] (c9)at (0,6) {$f_1$};
       \node[mycircle] (c10)at (3,6) {$f_2$};
       \node[mytext] (c21) at (8,0) {Input layer};
